@@ -1,0 +1,38 @@
+---
+title: "meaning-sec02"
+format: html
+---
+
+```{r}
+s <- read.csv("https://hash-mac.github.io/ds112site-f26/data/survey.csv")
+s
+```
+
+```{r}
+library(ggplot2)
+```
+
+
+```{r}
+ggplot(s, aes(hangout)) +
+  geom_bar()
+```
+
+
+```{r}
+ggplot(s, aes(x = fav_temp_c)) +
+  geom_histogram()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
