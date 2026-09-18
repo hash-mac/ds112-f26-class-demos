@@ -1,0 +1,20 @@
+---
+title: "meaning"
+---
+
+```{r}
+survey <- read.csv("https://hash-mac.github.io/ds112site-f26/data/survey.csv")
+survey
+```
+
+```{r}
+library(ggplot2)
+ggplot(survey, aes(x = hangout)) +
+  geom_bar()
+```
+
+```{r}
+ggplot(survey, aes(x = fav_temp_c)) +
+  geom_histogram()
+```
+
