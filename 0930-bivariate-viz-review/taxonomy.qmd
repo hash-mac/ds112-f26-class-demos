@@ -1,0 +1,236 @@
+
+```{r}
+library(ggplot2)
+library(patchwork)
+library(ggridges)
+library(dplyr)
+library(forcats)
+library(grid)
+
+# Set seed for reproducibility
+set.seed(42)
+
+# Generate synthetic dataset matching all variable needs
+n <- 300
+df <- data.frame(
+  Cat1 = sample(c("Group A", "Group B", "Group C"), n, replace = TRUE),
+  Cat2 = sample(c("Type X", "Type Y"), n, replace = TRUE, prob = c(0.6, 0.4)),
+  Num1 = c(rnorm(100, mean = 50, sd = 10), rnorm(100, mean = 65, sd = 15), rnorm(100, mean = 40, sd = 8)),
+  Num2 = rnorm(n, mean = 100, sd = 20),
+  Time = rep(1:50, length.out = n)
+)
+
+# Base Theme with added top & bottom plot margins for clean vertical separation
+clean_theme <- theme_minimal(base_size = 9) +
+  theme(
+    plot.title = element_text(size = 8.5, face = "bold", color = "#1a252f", hjust = 0, margin = margin(b = 2)),
+    plot.subtitle = element_text(size = 7, color = "#555555", hjust = 0, margin = margin(b = 3)),
+    
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_rect(color = "#dcdcdc", fill = NA, linewidth = 0.4),
+    
+    legend.position = "none",
+    
+    # Fully remove all axis elements
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    
+    strip.background = element_rect(fill = "#f8f9fa", color = "#dcdcdc"),
+    strip.text = element_text(size = 6.5, face = "bold", color = "#2c3e50"),
+    
+    # Increased top and bottom margins (8pt top, 4pt right, 8pt bottom, 4pt left)
+    plot.margin = margin(t = 8, r = 4, b = 8, l = 4)
+  )
+
+color_single <- "#7f8c8d"
+
+# Header Text Generator
+section_header <- function(text) {
+  wrap_elements(
+    panel = textGrob(
+      text, 
+      gp = gpar(fontsize = 10, fontface = "bold", col = "#1a252f"), 
+      x = 0.01, hjust = 0
+    )
+  )
+}
+
+# ==============================================================================
+# SECTION 1: 1 CATEGORICAL
+# ==============================================================================
+p_cat_base <- ggplot(df, aes(x = Cat1)) +
+  geom_bar(fill = color_single, width = 0.65) +
+  labs(title = "BAR CHART") +
+  clean_theme
+
+p_cat_stacked_raw <- ggplot(df, aes(x = Cat1, fill = Cat2)) +
+  geom_bar(width = 0.65) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "stacked (raw counts)") +
+  clean_theme
+
+p_cat_stacked_pct <- ggplot(df, aes(x = Cat1, fill = Cat2)) +
+  geom_bar(position = "fill", width = 0.65) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "stacked (%)") +
+  clean_theme
+
+p_cat_dodge <- ggplot(df, aes(x = Cat1, fill = Cat2)) +
+  geom_bar(position = "dodge", width = 0.7) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "dodge") +
+  clean_theme
+
+p_cat_facet <- ggplot(df, aes(x = Cat2, fill = Cat2)) +
+  geom_bar(width = 0.6) +
+  facet_wrap(~Cat1) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "facet") +
+  clean_theme
+
+# ==============================================================================
+# SECTION 2: 1 NUMERICAL
+# ==============================================================================
+p_hist_single <- ggplot(df, aes(x = Num1)) +
+  geom_histogram(bins = 20, fill = color_single, color = "white", linewidth = 0.15) +
+  labs(title = "HISTOGRAM") +
+  clean_theme
+
+p_hist_overlap <- ggplot(df, aes(x = Num1, fill = Cat1)) +
+  geom_histogram(bins = 20, position = "identity", alpha = 0.5, color = "white", linewidth = 0.15) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "overlap") +
+  clean_theme
+
+p_hist_facet <- ggplot(df, aes(x = Num1, fill = Cat1)) +
+  geom_histogram(bins = 15, color = "white", alpha = 0.85, linewidth = 0.15) +
+  facet_wrap(~Cat1, ncol = 1) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "facet") +
+  clean_theme
+
+p_density_single <- ggplot(df, aes(x = Num1)) +
+  geom_density(fill = color_single, alpha = 0.6, color = "#2c3e50") +
+  labs(title = "DENSITY PLOT") +
+  clean_theme
+
+p_density_overlap <- ggplot(df, aes(x = Num1, fill = Cat1, color = Cat1)) +
+  geom_density(alpha = 0.4) +
+  scale_fill_brewer(palette = "Set2") +
+  scale_color_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "overlap") +
+  clean_theme
+
+p_density_facet <- ggplot(df, aes(x = Num1, fill = Cat1)) +
+  geom_density(alpha = 0.6) +
+  facet_wrap(~Cat1, ncol = 1) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "facet") +
+  clean_theme
+
+p_density_ridges <- ggplot(df, aes(x = Num1, y = fct_rev(Cat1), fill = Cat1)) +
+  geom_density_ridges(alpha = 0.7, show.legend = FALSE, scale = 1.2) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "ridges") +
+  clean_theme
+
+p_box_single <- ggplot(df, aes(y = Num1)) +
+  geom_boxplot(fill = color_single, alpha = 0.8, width = 0.4) +
+  labs(title = "BOXPLOT") +
+  clean_theme
+
+p_box_cat <- ggplot(df, aes(x = Cat1, y = Num1, fill = Cat1)) +
+  geom_boxplot(alpha = 0.75, width = 0.5) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "1 box/category") +
+  clean_theme
+
+p_violin_single <- ggplot(df, aes(x = "", y = Num1)) +
+  geom_violin(fill = color_single, alpha = 0.8, width = 0.6) +
+  labs(title = "VIOLIN") +
+  clean_theme
+
+p_violin_cat <- ggplot(df, aes(x = Cat1, y = Num1, fill = Cat1)) +
+  geom_violin(alpha = 0.75, width = 0.7) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "+ CATEGORICAL", subtitle = "1 violin/category") +
+  clean_theme
+
+# ==============================================================================
+# SECTION 3: 2 NUMERICAL
+# ==============================================================================
+p_2num_scatter <- ggplot(df, aes(x = Num1, y = Num2)) +
+  geom_point(alpha = 0.6, color = "#2c3e50", size = 0.8) +
+  geom_smooth(method = "lm", color = "#e74c3c", se = FALSE, linetype = "dashed", linewidth = 0.5) +
+  labs(title = "SCATTER PLOT") +
+  clean_theme
+
+p_2num_line <- ggplot(df %>% arrange(Time), aes(x = Time, y = Num2)) +
+  geom_line(color = "#2980b9", linewidth = 0.6) +
+  labs(title = "LINE GRAPH", subtitle = "if x is ordered") +
+  clean_theme
+
+# ==============================================================================
+# 16:9 GRID ASSEMBLY WITH ENHANCED ROW SPACING
+# ==============================================================================
+all_plots <- list(
+  # Row 1: Section Headers
+  section_header("1 CATEGORICAL"),
+  section_header("1 NUMERICAL"),
+  plot_spacer(),
+  plot_spacer(),
+  plot_spacer(),
+  section_header("2 NUMERICAL"),
+
+  # Row 2: Single Variable Baseline
+  p_cat_base, p_hist_single, p_density_single, p_box_single, p_violin_single, p_2num_scatter,
+
+  # Row 3: Extension 1
+  p_cat_stacked_raw, p_hist_overlap, p_density_overlap, p_box_cat, p_violin_cat, p_2num_line,
+
+  # Row 4: Extension 2
+  p_cat_stacked_pct, p_hist_facet, p_density_facet, plot_spacer(), plot_spacer(), plot_spacer(),
+
+  # Row 5: Extension 3
+  p_cat_dodge, plot_spacer(), p_density_ridges, plot_spacer(), plot_spacer(), plot_spacer(),
+
+  # Row 6: Extension 4
+  p_cat_facet, plot_spacer(), plot_spacer(), plot_spacer(), plot_spacer(), plot_spacer()
+)
+
+master_graphic <- wrap_plots(
+  all_plots, 
+  ncol = 6, 
+  widths = c(1, 1, 1, 1, 1, 1), 
+  heights = c(0.12, 1, 1, 1, 1, 1)
+) +
+  plot_annotation(
+    title = "Bivariate Data Visualization Taxonomy",
+    subtitle = "Overview of single-variable baseline plots (gray) and their corresponding bivariate extensions",
+    theme = theme(
+      plot.title = element_text(size = 13, face = "bold", color = "#1a252f", hjust = 0, margin = margin(b = 2)),
+      plot.subtitle = element_text(size = 9, color = "#555555", hjust = 0, margin = margin(b = 6))
+    )
+  )
+
+print(master_graphic)
+```
+
+
+```{r}
+# Export for Widescreen 16:9 Presentation (13.33" x 7.5")
+ggsave(
+  filename = "bivariate_taxonomy_16x9.png",
+  plot = master_graphic,
+  width = 13.33,
+  height = 7.5,
+  units = "in",
+  dpi = 300
+)
+```
