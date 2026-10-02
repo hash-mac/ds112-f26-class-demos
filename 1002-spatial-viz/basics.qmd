@@ -65,7 +65,34 @@ boundary_df <- tribble(
 boundary_df
 ```
 
+```{r}
+values_df <- tribble(
+  ~id,    ~value,
+  "c11",  1,
+  "c12",  2,
+  "c13",  3,
+  "c21",  3,
+  "c22",  5,
+  "c23",  6,
+  "c31",  7,
+  "c32",  8,
+  "c33",  9
+)
+values_df
+```
 
+
+
+
+```{r}
+ggplot() +
+  geom_map(
+    data = values_df,
+    map = boundary_df,
+    aes(map_id = id, fill = value)
+  ) +
+  expand_limits(x = boundary_df$long, y = boundary_df$lat)
+```
 
 ```{r}
 centers_df <- tribble(
@@ -81,34 +108,6 @@ centers_df <- tribble(
   "c33",   25,    25
 )
 centers_df
-```
-
-
-```{r}
-ggplot() +
-  geom_map(
-    data = values_df,
-    map = boundary_df,
-    aes(map_id = id, fill = value)
-  ) +
-  expand_limits(x = boundary_df$long, y = boundary_df$lat)
-```
-
-
-```{r}
-values_df <- tribble(
-  ~id,    ~value,
-  "c11",  1,
-  "c12",  2,
-  "c13",  3,
-  "c21",  3,
-  "c22",  5,
-  "c23",  6,
-  "c31",  7,
-  "c32",  8,
-  "c33",  9
-)
-values_df
 ```
 
 ```{r}
