@@ -1,0 +1,67 @@
+---
+title: "tt-sec1"
+---
+
+```{r}
+ufc_athletes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-07-07/ufc_athletes.csv')
+ufc_fights <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-07-07/ufc_fights.csv')
+ufc_rankings_dataset <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-07-07/ufc_rankings_dataset.csv')
+ufcstats_data <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-07-07/ufcstats_data.csv')
+ultimate_ufc_dataset <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-07-07/ultimate_ufc_dataset.csv')
+
+```
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+ufc_athletes |> 
+  select(height, weight)
+```
+
+```{r}
+ufc_athletes |> 
+  select(height, weight) |> 
+  summarise(hm = mean(height), wm = mean(weight))
+```
+
+
+```{r}
+ufc_athletes |> 
+  select(height, weight) |> 
+  filter(!is.na(height)) |> 
+  filter(!is.na(weight)) |> 
+  summarise(hm = mean(height), wm = mean(weight))
+```
+
+
+```{r}
+ufc_athletes |> 
+  select(height, weight) |> 
+  summarise(hm = mean(height, na.rm = TRUE), 
+            wm = mean(weight, na.rm = TRUE))
+```
+
+
+```{r}
+ufc_athletes |> 
+  select(height, weight) |> 
+  filter(!is.na(height)) |> 
+  summarise(hm = mean(height), wm = mean(weight))
+```
+
+```{r}
+ufc_athletes |> 
+  select(height, weight) |> 
+  filter(!is.na(weight)) |> 
+  summarise(hm = mean(height), wm = mean(weight))
+```
+
+
+
+
+
+
+

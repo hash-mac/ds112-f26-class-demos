@@ -1,0 +1,71 @@
+---
+title: "tt-sec2"
+---
+
+```{r}
+financing_schemes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-21/financing_schemes.csv')
+health_spending <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-21/health_spending.csv')
+spending_purpose <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-21/spending_purpose.csv')
+```
+
+```{r}
+health_spending |> 
+  select(country_name, year, value)
+```
+
+```{r}
+health_spending |> 
+  select(country_name, year, value) |> 
+  summarize(ss = sum(value))
+```
+
+
+```{r}
+health_spending |> 
+  select(country_name, year, value) |> 
+  group_by(year) |> 
+  summarize(ss = sum(value))
+```
+
+```{r}
+health_spending |> 
+  select(country_name, year, value) |> 
+  group_by(year) |> 
+  summarize(ss = sum(value)) |> 
+  filter(ss == max(ss))
+```
+
+
+```{r}
+health_spending |> 
+  select(country_name, year, value) |> 
+  group_by(year) |> 
+  summarize(ss = sum(value)) |> 
+  arrange(desc(ss))
+```
+
+```{r}
+health_spending |> 
+  select(country_name, year, value) |> 
+  group_by(country_name) |> 
+  summarize(ss = sum(value)) |> 
+  arrange(desc(ss))
+```
+
+
+```{r}
+health_spending |> 
+  select(country_name, year, value) |> 
+  group_by(country_name) |> 
+  summarize(ss = sum(value)) |> 
+  arrange(ss)
+```
+
+
+
+
+
+
+
+
+
