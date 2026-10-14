@@ -1,0 +1,40 @@
+---
+title: "tt-sec2"
+---
+
+```{r}
+tidy_anime <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2019/2019-04-23/tidy_anime.csv")
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+library(ggplot2)
+```
+
+
+```{r}
+#| fig-height: 2
+#| fig-width: 6
+tidy_anime |> 
+  select(type, score) |> 
+  group_by(type) |> 
+  summarize(mean = mean(score, na.rm = TRUE)) |> 
+  arrange(desc(mean)) |> 
+  ggplot(aes(x = type, y = mean)) +
+  geom_col()
+```
+
+
+
+
+
+
+
+
+
+
+
+

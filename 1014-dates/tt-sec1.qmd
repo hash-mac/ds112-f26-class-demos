@@ -1,0 +1,41 @@
+---
+title: "tt-sec1"
+---
+
+```{r}
+ultra_rankings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2021/2021-10-26/ultra_rankings.csv')
+race <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2021/2021-10-26/race.csv')
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+library(ggplot2)
+```
+
+
+```{r}
+race |> 
+  select(elevation_gain, aid_stations) |> 
+  mutate(elevation_gain = elevation_gain %/% 1000) |> 
+  group_by(elevation_gain) |> 
+  summarize(mean = mean(aid_stations)) |> 
+  ggplot(aes(x = elevation_gain, y = mean)) +
+  geom_point()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
