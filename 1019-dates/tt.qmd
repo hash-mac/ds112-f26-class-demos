@@ -1,0 +1,42 @@
+---
+title: "tt"
+---
+
+```{r}
+cities <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-05-12/cities.csv')
+links <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-05-12/links.csv')
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+cities |> 
+  group_by(country) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+```
+
+```{r}
+cities |> 
+  filter(country == "United States of America")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
