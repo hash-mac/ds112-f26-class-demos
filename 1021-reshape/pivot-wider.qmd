@@ -20,3 +20,35 @@ library(tidyr)
 sales |> 
     pivot_wider(names_from = year, values_from = sales, values_fill = 0)
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

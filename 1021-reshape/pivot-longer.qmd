@@ -6,13 +6,13 @@ sales <- tribble(
     "B", 33, 22, 11,
     "C", 15, 25, 35
 )
-
 sales
 ```
 
 ```{r}
 library(tidyr)
 library(dplyr)
+library(ggplot2)
 sales |> 
     pivot_longer(cols = -prod, names_to = "year", values_to = "sales") |> 
     mutate(year = as.numeric(year)) |> 
@@ -20,3 +20,28 @@ sales |>
     geom_point(size = 10) +
     geom_line()
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
