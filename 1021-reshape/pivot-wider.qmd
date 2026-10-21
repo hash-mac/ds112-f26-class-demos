@@ -1,0 +1,22 @@
+
+```{r}
+library(tibble)
+sales <- tribble(
+    ~prod, ~year, ~sales,
+    "A", 2024, 10,
+    "A", 2025, 20,
+    "A", 2026, 30,
+    "B", 2024, 33,
+    "B", 2025, 22,
+    "C", 2025, 25,
+    "C", 2026, 35
+)
+sales
+```
+
+
+```{r}
+library(tidyr)
+sales |> 
+    pivot_wider(names_from = year, values_from = sales, values_fill = 0)
+```
