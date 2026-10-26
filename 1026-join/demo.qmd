@@ -1,0 +1,80 @@
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+f <- tibble::tribble(
+    ~st, ~prod,
+     "MN", "apple",
+     "WI", "apple",
+     "MN", "banana",
+     "WI", "grape"
+    )
+f
+```
+
+
+```{r}
+p <- tibble::tribble(
+    ~pr, ~co,
+     "apple", 2,
+     "banana", 1,
+     "mango", 3
+    )
+p
+```
+
+
+```{r}
+left_join(f, p, join_by(prod == pr))
+```
+
+```{r}
+right_join(p, f, join_by(pr == prod))
+```
+
+```{r}
+left_join(p, f, join_by(pr == prod))
+```
+
+```{r}
+right_join(f, p, join_by(prod == pr))
+```
+
+
+
+```{r}
+inner_join(f, p, join_by(prod == pr))
+```
+
+```{r}
+inner_join(p, f, join_by(pr == prod))
+```
+
+
+```{r}
+full_join(f, p, join_by(prod == pr))
+```
+
+```{r}
+full_join(p, f, join_by(pr == prod))
+```
+
+```{r}
+semi_join(f, p, join_by(prod == pr))
+```
+
+```{r}
+semi_join(p, f, join_by(pr == prod))
+```
+
+
+```{r}
+anti_join(f, p, join_by(prod == pr))
+```
+
+```{r}
+anti_join(p, f, join_by(pr == prod))
+```
