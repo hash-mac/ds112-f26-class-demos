@@ -11,19 +11,7 @@ links <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidy
 
 
 ```{r}
-library(dplyr)
 
-cities |> 
-    filter(name == "Saint Paul")
-
-links |> 
-    filter(source == "Q28848" | target == "Q28848") |> 
-    mutate(
-        target = if_else(source == "Q28848", target, source),
-        source = "Q28848"
-    ) |> 
-    left_join(cities, join_by(source == id)) |> 
-    left_join(cities, join_by(target == id))
 ```
 
 
