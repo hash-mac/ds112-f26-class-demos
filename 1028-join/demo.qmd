@@ -1,0 +1,101 @@
+---
+title: "Twinned Cities"
+---
+
+TidyTuesday Challenge: https://github.com/rfordatascience/tidytuesday/blob/main/data/2026/2026-05-12/readme.md
+
+```{r}
+cities <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-05-12/cities.csv')
+links <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-05-12/links.csv')
+```
+
+
+```{r}
+library(dplyr)
+
+cities |> 
+    filter(name == "Saint Paul")
+
+links |> 
+    filter(source == "Q28848" | target == "Q28848") |> 
+    mutate(
+        target = if_else(source == "Q28848", target, source),
+        source = "Q28848"
+    ) |> 
+    left_join(cities, join_by(source == id)) |> 
+    left_join(cities, join_by(target == id))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+library(dplyr)
+library(leaflet)
+
+city_links_map <- function(country, city_name = NULL) {
+    selected <- cities |> filter(countrycd == {{ country }})
+    if (!is.null(city_name)) {
+        selected <- selected |> filter(name == {{ city_name }})
+    }
+    ids <- selected |> pull(id)
+
+    links_coords <- links |> 
+        filter(source %in% ids | target %in% ids) |> 
+        left_join(cities |> select(id, lng, lat), join_by(source == id)) |> 
+        rename(src.lng = lng, src.lat = lat) |> 
+        left_join(cities |> select(id, lng, lat), join_by(target == id)) |> 
+        rename(tar.lng = lng, tar.lat = lat)
+
+    lngs <- as.vector(rbind(links_coords$src.lng, links_coords$tar.lng, NA))
+    lats <- as.vector(rbind(links_coords$src.lat, links_coords$tar.lat, NA))
+
+    leaflet(options = leafletOptions(minZoom = 1, maxBoundsViscosity = 1)) |> 
+        addProviderTiles("OpenStreetMap.Mapnik",
+                         options = providerTileOptions(noWrap = TRUE)) |> 
+        setMaxBounds(-180, -90, 180, 90) |> 
+        addPolylines(lng = lngs, lat = lats, weight = 1, opacity = 0.5) |> 
+        addControl(city_name, position = "topright")
+}
+```
+
+```{r}
+#| layout-ncol: 2
+city_links_map("US", "Minneapolis")
+city_links_map("US", "Saint Paul")
+city_links_map("US")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
