@@ -9,10 +9,16 @@ cities <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 links <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-05-12/links.csv')
 ```
 
-
 ```{r}
+library(dplyr)
 
+links |> 
+  left_join(cities, join_by(source == id)) |> 
+  select(sname = name, scountry = country, target) |> 
+  left_join(cities, join_by(target == id)) |> 
+  select(sname, scountry, tname = name, tcountry = country)
 ```
+
 
 
 
@@ -72,7 +78,7 @@ city_links_map <- function(country, city_name = NULL) {
 #| layout-ncol: 2
 city_links_map("US", "Minneapolis")
 city_links_map("US", "Saint Paul")
-city_links_map("US")
+# city_links_map("US")
 ```
 
 
