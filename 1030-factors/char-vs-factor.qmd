@@ -1,0 +1,66 @@
+
+```{r}
+name <- c(
+  "Alice Chen", "Bob Smith", "Charlie Davis", "Diana Prince",
+  "Evan Wright", "Fiona Gallagher", "George Miller", "Hannah Abbott",
+  "Ian Malcolm", "Julia Roberts", "Kevin Hart", "Laura Croft"
+)
+
+class_year <- c(
+    "First Year", "First Year", "First Year", "Junior",
+    "First Year", "Senior", "Junior", "Sophomore",
+    "First Year", "Junior", "Junior", "Sophomore"
+)
+
+major <- c(
+    "CS", "BIO", "ART", "DS", "ECO", "CS", "BIO", "ECO", "DS", "ART", "CS", "BIO"
+)
+
+students <- data.frame(name, class_year, major, stringsAsFactors = FALSE)
+students
+```
+
+
+```{r}
+library(ggplot2)
+students |> 
+    ggplot(aes(x = class_year)) +
+    geom_bar()
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(forcats)
+students |> 
+    mutate(class_year = fct_relevel(
+        class_year, 
+        c("First Year", "Sophomore", "Junior", "Senior"))) |> 
+    ggplot(aes(x = class_year)) +
+    geom_bar()
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(forcats)
+students |> 
+    mutate(class_year = fct_recode(
+        class_year, 
+        "FY" = "First Year" , 
+        "SO" = "Sophomore", 
+        "JU" = "Junior",
+        "SE" = "Senior")) |> 
+    ggplot(aes(x = class_year)) +
+    geom_bar()
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(forcats)
+students |> 
+    mutate(class_year = fct_infreq(class_year)) |> 
+    ggplot(aes(x = class_year)) +
+    geom_bar()
+```
