@@ -1,0 +1,40 @@
+
+```{r}
+df <- tibble::tribble(
+    ~se,
+    "FALL",
+    "WINTER",
+    "SPRING",
+    "SUMMER"
+)
+df
+```
+
+```{r}
+library(dplyr)
+library(stringr)
+```
+
+```{r}
+df |> mutate(se = str_to_lower(se))
+```
+
+```{r}
+df |> mutate(se = str_replace(se, "R", "$"))
+```
+
+```{r}
+df |> mutate(se = str_sub(se, 1, 2))
+```
+
+```{r}
+df |> mutate(len = str_length(se))
+```
+
+```{r}
+df |> mutate(there = str_detect(se, "I"))
+```
+
+```{r}
+df |> tidyr::separate_wider_regex(se, c("p1" = "..", "p2" = ".+"))
+```
