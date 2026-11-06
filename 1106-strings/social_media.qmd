@@ -1,0 +1,30 @@
+---
+title: "Clean Social Music Data"
+---
+
+```{r}
+library(tidyverse)
+library(stringr)
+```
+
+```{r}
+smd <- read_csv("social_music_data.csv")
+head(smd) |> gt::gt()
+```
+
+```{r}
+smd |> 
+    select(caption = social_caption) |> 
+    mutate(
+    # Extract tags
+    tags = str_extract_all(caption, "#\\w+"),
+    
+    # Extract mentioned user
+    mentions = str_extract(caption, "@\\w+"),
+    
+    # Remove URLs
+    caption = str_replace_all(caption, "https?://\\S+", "[URL]")
+  ) |>
+    head() |> 
+    gt::gt()
+```
